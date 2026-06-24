@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 const anioActual = new Date().getFullYear();
 
-const caracteresInvalidos = /[<>{}[\]\\]/;
+const caracteresInvalidos = /[<>{}[\]\\.-]/;
 
 export const bookSchema = z.object({
   titulo: z

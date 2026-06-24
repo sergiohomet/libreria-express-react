@@ -1,5 +1,5 @@
 const anioActual = new Date().getFullYear();
-const caracteresInvalidos = /[<>{}[\]\\]/;
+const caracteresInvalidos = /[<>{}[\]\\.-]/;
 
 function validateLibro(req, res, next) {
   const { titulo, autor, anio, disponible } = req.body;
