@@ -188,8 +188,8 @@ Retorna un libro específico según su identificador numérico.
 
 ### 3.3 — POST /libros
 
-Registra un nuevo libro en el catálogo. El `id` se asigna automáticamente como el valor máximo
-de los ids existentes más uno.
+Registra un nuevo libro en el catálogo. El `id` es asignado automáticamente por PostgreSQL
+como clave primaria autoincremental (SERIAL); no debe enviarse en el body.
 
 | Ítem              | Valor                           |
 |-------------------|---------------------------------|
@@ -345,6 +345,15 @@ funcionalidades extra que mejoran la experiencia de uso:
 
 ### Dificultades encontradas
 
+**Persistencia en la nube — migración de JSON a PostgreSQL:** la versión inicial almacenaba los
+datos en un archivo `libros.json` usando `fs.readFileSync/writeFileSync`. Al planificar el deploy
+en Render se identificó que su filesystem es efímero: cualquier escritura se pierde al reiniciar
+el servidor. La solución fue migrar a PostgreSQL usando Sequelize ORM. Se creó `src/config/db.js`
+para la conexión via `DATABASE_URL` con SSL, y `src/models/Libro.js` que define la tabla. Los
+handlers pasaron de operaciones sobre arrays a métodos de Sequelize: `findAll()`, `findByPk()`,
+`create()`, `update()` + `save()` y `destroy()`. Sequelize crea la tabla automáticamente en la
+primera ejecución mediante `db.sync()`.
+
 **Sincronización del estado entre frontend y backend:** al agregar o editar un libro, fue
 necesario volver a hacer un `GET /libros` para refrescar la tabla, en lugar de actualizar el
 estado local directamente. Esto se resolvió dentro del hook `useBooks` llamando a `fetchBooks()`
@@ -358,6 +367,8 @@ en `register()`, y validando el tipo `number` en el esquema Zod.
 estándar de JavaScript. Se implementó la función `extraerMensajeError` que usa `axios.isAxiosError`
 para extraer el campo `error` del body de respuesta y mostrarlo en el toast correspondiente.
 
-**CORS:** al separar frontend (puerto 5173) y backend (puerto 3001) en desarrollo, el navegador
-bloqueaba las peticiones. Se resolvió configurando el middleware `cors` con el origen exacto del
-frontend via variable de entorno `CORS_ORIGIN`.
+**CORS en deploy:** en desarrollo, frontend (puerto 5173) y backend (puerto 3001) corren en la
+misma máquina. En producción, el frontend está en Vercel y el backend en Render (dominios
+distintos), por lo que el navegador bloquea las peticiones por defecto. Se resolvió configurando
+el middleware `cors` con el origen exacto del frontend via la variable de entorno `CORS_ORIGIN`,
+que en producción se setea con la URL de Vercel.

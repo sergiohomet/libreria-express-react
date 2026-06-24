@@ -20,9 +20,24 @@ y sencilla desde cualquier navegador.
 
 ---
 
-## Cómo iniciar la aplicación
+## Cómo acceder a la aplicación
 
-### 1. Iniciar el servidor (Backend)
+### Versión desplegada (producción)
+
+La aplicación está disponible en línea sin necesidad de instalar nada:
+
+- **Frontend (Vercel):** `https://tu-app.vercel.app`
+- **Backend (Render):** `https://tu-backend.onrender.com`
+
+> Reemplazar las URLs por las reales una vez completado el deploy.
+
+---
+
+### Versión local (desarrollo)
+
+Para correr la aplicación en tu computadora necesitás tener instalado **Node.js**.
+
+#### 1. Iniciar el servidor (Backend)
 
 Abrir una terminal en la carpeta `backend` y ejecutar:
 
@@ -33,7 +48,9 @@ npm run dev        # inicia el servidor en modo desarrollo
 
 El servidor quedará disponible en: `http://localhost:3001`
 
-### 2. Iniciar la interfaz web (Frontend)
+> Requiere un archivo `.env` con las variables `DATABASE_URL`, `API_KEY` y `CORS_ORIGIN`.
+
+#### 2. Iniciar la interfaz web (Frontend)
 
 Abrir otra terminal en la carpeta `frontend` y ejecutar:
 
@@ -44,7 +61,7 @@ npm run dev        # inicia la interfaz web
 
 La aplicación quedará disponible en: `http://localhost:5173`
 
-> Ambos deben estar corriendo al mismo tiempo para que la aplicación funcione.
+> Ambos deben estar corriendo al mismo tiempo para que la aplicación funcione en modo local.
 
 ---
 
@@ -203,16 +220,17 @@ principal. La sesión se cierra y se regresa a la pantalla de login.
 ## Preguntas frecuentes
 
 **¿Se guardan los datos si se reinicia el servidor?**
-Sí. El catálogo de libros se almacena en el archivo `backend/data/libros.json`, por lo que
-los datos persisten entre reinicios del servidor.
+Sí. El catálogo de libros se almacena en una base de datos PostgreSQL en la nube (Render),
+por lo que los datos persisten entre reinicios del servidor y nuevos deploys.
 
 **¿Qué pasa si el servidor no está corriendo?**
-La tabla mostrará el mensaje de carga indefinidamente o aparecerá un toast de error. Verificar
-que el backend esté iniciado en el puerto 3001.
+La tabla mostrará el estado de carga indefinidamente o aparecerá un toast de error de red.
+En producción, el servidor en Render puede tardar unos segundos en "despertar" si estuvo
+inactivo; en modo local, verificar que el backend esté iniciado en el puerto 3001.
 
 **¿Puedo acceder desde otro dispositivo?**
-En la configuración actual, la aplicación solo funciona en la misma computadora donde está
-corriendo. Para acceso en red se requiere configuración adicional.
+Sí, si se usa la versión desplegada en Vercel. En modo local, la aplicación solo funciona
+en la misma computadora donde está corriendo.
 
 **¿Puedo tener dos libros con el mismo título?**
 Sí. El sistema identifica los libros por su ID numérico, no por el título. Pueden existir
