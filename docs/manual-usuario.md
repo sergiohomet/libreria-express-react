@@ -76,7 +76,7 @@ Al abrir la aplicación en el navegador, se muestra la pantalla de login.
 | Usuario    | `admin`        |
 | Contraseña | `biblioteca123`|
 
-[CAPTURA: Pantalla de login]
+![Pantalla de login](capturas/02-login.png)
 
 **Errores posibles:**
 - Si algún campo está vacío, aparece el mensaje *"El usuario es obligatorio"* o
@@ -90,7 +90,7 @@ Hacer clic en **Ingresar** para acceder al sistema.
 
 ## Pantalla principal — Gestión de Libros
 
-[CAPTURA: Pantalla principal con la tabla de libros]
+![Pantalla principal con tabla de libros](capturas/03-pantalla-principal.png)
 
 Una vez autenticado se accede a la pantalla principal, que contiene:
 
@@ -131,7 +131,7 @@ Una vez autenticado se accede a la pantalla principal, que contiene:
 4. Si todo es correcto, el libro aparece en la tabla y se muestra una notificación verde
    *"Libro agregado correctamente"*.
 
-[CAPTURA: Modal de alta de libro con datos completados]
+![Modal de alta con datos completados](capturas/05-modal-alta-datos.png)
 
 **Errores posibles al guardar:**
 - *"El título es obligatorio"* — el campo Título está vacío.
@@ -149,7 +149,7 @@ Una vez autenticado se accede a la pantalla principal, que contiene:
 3. Modificar los campos necesarios y hacer clic en **Guardar**.
 4. La tabla se actualizará y aparecerá la notificación *"Libro actualizado correctamente"*.
 
-[CAPTURA: Modal de edición con datos del libro]
+![Modal de edición con datos prellenados](capturas/06-modal-edicion.png)
 
 > Para cancelar sin guardar cambios, hacer clic en **Cancelar** o fuera del modal.
 
@@ -160,7 +160,7 @@ Una vez autenticado se accede a la pantalla principal, que contiene:
 1. En la tabla, hacer clic en el botón **Eliminar** de la fila del libro a eliminar.
 2. Aparecerá un diálogo de confirmación: *"¿Estás seguro de que querés eliminar este libro?"*
 
-[CAPTURA: Diálogo de confirmación de eliminación]
+![Diálogo de confirmación de eliminación](capturas/10-confirmacion-eliminar.png)
 
 3. Hacer clic en **Aceptar** para confirmar o **Cancelar** para volver sin eliminar.
 4. Si se confirma, el libro desaparece de la tabla y aparece la notificación
@@ -173,7 +173,7 @@ Una vez autenticado se accede a la pantalla principal, que contiene:
 Escribir cualquier parte del título del libro en el campo de búsqueda ubicado en la parte
 superior de la pantalla. La tabla se filtra automáticamente a medida que se escribe.
 
-[CAPTURA: Buscador con texto ingresado y tabla filtrada]
+![Buscador con tabla filtrada](capturas/08-buscador-filtrado.png)
 
 Para limpiar la búsqueda, borrar el texto del campo.
 

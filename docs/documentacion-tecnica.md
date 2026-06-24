@@ -272,17 +272,19 @@ Elimina un libro del catálogo. Retorna el objeto eliminado.
 
 ### 4.1 Pantalla de Login
 
-[CAPTURA: Pantalla de login mostrando el formulario con campos Usuario y Contraseña]
+![Pantalla de login con credenciales ingresadas](capturas/02-login.png)
 
-*Acceso con usuario `admin` y contraseña `biblioteca123`. La validación con Zod muestra mensajes
-de error en tiempo real si los campos están vacíos.*
+*Acceso con usuario `admin` y contraseña `biblioteca123`.*
+
+![Login con errores de validación](capturas/01-login-errores.png)
+
+*La validación con Zod muestra mensajes de error en tiempo real si los campos están vacíos.*
 
 ---
 
 ### 4.2 Listado de Libros
 
-[CAPTURA: Pantalla principal mostrando la tabla con todos los libros, el buscador, el filtro de
-disponibilidad y el botón "+ Agregar libro"]
+![Pantalla principal con tabla de libros](capturas/03-pantalla-principal.png)
 
 *La tabla muestra ID, Título, Autor, Año, Disponibilidad (con badge verde/rojo) y los botones
 Editar y Eliminar por fila.*
@@ -291,16 +293,18 @@ Editar y Eliminar por fila.*
 
 ### 4.3 Alta de Libro (Modal de creación)
 
-[CAPTURA: Modal abierto con el formulario vacío para agregar un nuevo libro]
+![Modal de alta vacío](capturas/04-modal-alta-vacio.png)
 
 *Al hacer clic en "+ Agregar libro" se abre el modal. Si se intenta guardar con campos inválidos,
 se muestran los mensajes de error del esquema Zod antes de enviar al servidor.*
+
+![Modal de alta con datos completados](capturas/05-modal-alta-datos.png)
 
 ---
 
 ### 4.4 Modificación de Libro (Modal de edición)
 
-[CAPTURA: Modal abierto con los datos de un libro existente prellenados, listos para editar]
+![Modal de edición con datos prellenados](capturas/06-modal-edicion.png)
 
 *Al hacer clic en "Editar" el modal se precarga con los datos actuales del libro seleccionado.
 Al guardar se realiza un PUT /libros/:id y se refresca la tabla.*
@@ -309,17 +313,16 @@ Al guardar se realiza un PUT /libros/:id y se refresca la tabla.*
 
 ### 4.5 Eliminación de Libro
 
-[CAPTURA: Diálogo de confirmación del navegador preguntando "¿Estás seguro de que querés
-eliminar este libro?"]
+![Diálogo de confirmación de eliminación](capturas/10-confirmacion-eliminar.png)
 
-*Al hacer clic en "Eliminar" se muestra un diálogo de confirmación nativo del navegador. Si el
-usuario confirma, se ejecuta DELETE /libros/:id y aparece un toast de éxito.*
+*Al hacer clic en "Eliminar" se muestra un diálogo de confirmación. Si el usuario confirma,
+se ejecuta DELETE /libros/:id y aparece un toast de éxito.*
 
 ---
 
 ### 4.6 Notificaciones Toast
 
-[CAPTURA: Toast verde de éxito ("Libro agregado correctamente") o toast rojo de error]
+![Toast de éxito](capturas/07-toast-exito.png)
 
 *Los toast aparecen durante 3 segundos en la esquina de la pantalla y se pueden cerrar
 manualmente.*
