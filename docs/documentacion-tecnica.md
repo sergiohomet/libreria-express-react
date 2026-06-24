@@ -13,14 +13,15 @@ ejemplares disponibles.
 
 El presente trabajo implementa una aplicación web full-stack que resuelve este problema mediante
 una arquitectura cliente-servidor. El backend expone una API REST desarrollada con Node.js y
-Express, que gestiona el catálogo de libros y persiste los datos en un archivo JSON. El frontend,
-desarrollado con React y TypeScript, consume dicha API y ofrece una interfaz gráfica intuitiva
-para que los operadores de la biblioteca puedan administrar el catálogo sin conocimientos técnicos.
+Express, que gestiona el catálogo de libros y persiste los datos en una base de datos PostgreSQL
+a través del ORM Sequelize. El frontend, desarrollado con React y TypeScript, consume dicha API
+y ofrece una interfaz gráfica intuitiva para que los operadores de la biblioteca puedan
+administrar el catálogo sin conocimientos técnicos.
 
 Se implementaron, además de los requisitos mínimos, las siguientes funcionalidades extra:
 - Búsqueda por título en tiempo real.
 - Filtro por disponibilidad.
-- Persistencia en archivo JSON.
+- Persistencia en base de datos PostgreSQL (Render) mediante Sequelize ORM.
 - Autenticación por API Key en el backend.
 - Pantalla de login con validación en el frontend.
 
@@ -43,11 +44,12 @@ La aplicación sigue una arquitectura cliente-servidor de dos capas desacopladas
 │              SERVIDOR — Express (Node.js)               │
 │   Middleware: CORS, JSON parser, apiKeyAuth             │
 │   Router: /libros → validateLibro → handler            │
+│   ORM: Sequelize (findAll, findByPk, create, update...) │
 └────────────────────────┬────────────────────────────────┘
-                         │ fs.readFileSync / fs.writeFileSync
+                         │ Sequelize ORM (SSL)
                          ▼
 ┌─────────────────────────────────────────────────────────┐
-│               PERSISTENCIA — data/libros.json           │
+│          PERSISTENCIA — PostgreSQL (Render)             │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -56,6 +58,8 @@ La aplicación sigue una arquitectura cliente-servidor de dos capas desacopladas
 | Capa       | Tecnología                    | Versión |
 |------------|-------------------------------|---------|
 | Backend    | Node.js + Express             | 4.18.x  |
+| Backend    | Sequelize (ORM)               | 6.x     |
+| Backend    | pg + pg-hstore                | 8.x     |
 | Backend    | dotenv                        | 17.x    |
 | Backend    | cors                          | 2.8.x   |
 | Frontend   | React                         | 18.2.x  |
@@ -70,10 +74,12 @@ La aplicación sigue una arquitectura cliente-servidor de dos capas desacopladas
 ```
 libreria-express-react/
 ├── backend/
-│   ├── data/
-│   │   └── libros.json               # Base de datos en archivo
 │   └── src/
-│       ├── index.js                  # Punto de entrada, configuración Express
+│       ├── index.js                  # Punto de entrada, conexión DB y Express
+│       ├── config/
+│       │   └── db.js                 # Instancia Sequelize (DATABASE_URL)
+│       ├── models/
+│       │   └── Libro.js              # Modelo Sequelize de la tabla libros
 │       ├── routes/
 │       │   └── libros.js             # Definición de los 5 endpoints
 │       └── middleware/
@@ -334,8 +340,8 @@ funcionalidades extra que mejoran la experiencia de uso:
   aunque se acceda directamente a la API.
 - La autenticación por API Key agrega una capa de seguridad básica que impide el acceso no
   autorizado a los endpoints.
-- La persistencia en archivo JSON permite que los datos sobrevivan entre reinicios del servidor
-  sin necesidad de una base de datos, lo cual simplifica el despliegue para el alcance del TP.
+- La persistencia en PostgreSQL mediante Sequelize permite que los datos sobrevivan entre
+  reinicios del servidor y deploys en la nube (Render), garantizando integridad real de los datos.
 
 ### Dificultades encontradas
 

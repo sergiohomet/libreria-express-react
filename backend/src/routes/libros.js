@@ -1,71 +1,67 @@
 const express = require('express');
-const fs = require('fs');
-const path = require('path');
+const Libro = require('../models/Libro');
 const validateLibro = require('../middleware/validateLibro');
 
 const router = express.Router();
-const dataPath = path.join(__dirname, '../../data/libros.json');
-
-function leerLibros() {
-  const contenido = fs.readFileSync(dataPath, 'utf-8');
-  return JSON.parse(contenido);
-}
-
-function guardarLibros(libros) {
-  fs.writeFileSync(dataPath, JSON.stringify(libros, null, 2), 'utf-8');
-}
 
 // Obtener todos los libros
-router.get('/', (req, res) => {
-  const libros = leerLibros();
-  res.json(libros);
+router.get('/', async (req, res) => {
+  try {
+    const libros = await Libro.findAll();
+    res.json(libros);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener los libros' });
+  }
 });
 
 // Obtener un libro por ID
-router.get('/:id', (req, res) => {
-  const libros = leerLibros();
-  const libro = libros.find(l => l.id === Number(req.params.id));
-  if (!libro) return res.status(404).json({ error: 'Libro no encontrado' });
-  res.json(libro);
+router.get('/:id', async (req, res) => {
+  try {
+    const libro = await Libro.findByPk(req.params.id);
+    if (!libro) return res.status(404).json({ error: 'Libro no encontrado' });
+    res.json(libro);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener el libro' });
+  }
 });
 
 // Crear un libro
-router.post('/', validateLibro, (req, res) => {
-  const libros = leerLibros();
-  const { titulo, autor, anio, disponible } = req.body;
-
-  const nuevoId = libros.length > 0 ? Math.max(...libros.map(l => l.id)) + 1 : 1;
-
-  const nuevoLibro = { id: nuevoId, titulo: titulo.trim(), autor: autor.trim(), anio, disponible };
-  libros.push(nuevoLibro);
-  guardarLibros(libros);
-
-  res.status(201).json(nuevoLibro);
+router.post('/', validateLibro, async (req, res) => {
+  try {
+    const { titulo, autor, anio, disponible } = req.body;
+    const libro = await Libro.create({ titulo: titulo.trim(), autor: autor.trim(), anio, disponible });
+    res.status(201).json(libro);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al crear el libro' });
+  }
 });
 
 // Actualizar un libro
-router.put('/:id', validateLibro, (req, res) => {
-  const libros = leerLibros();
-  const index = libros.findIndex(l => l.id === Number(req.params.id));
-  if (index === -1) return res.status(404).json({ error: 'Libro no encontrado' });
+router.put('/:id', validateLibro, async (req, res) => {
+  try {
+    const libro = await Libro.findByPk(req.params.id);
+    if (!libro) return res.status(404).json({ error: 'Libro no encontrado' });
 
-  const { titulo, autor, anio, disponible } = req.body;
-  libros[index] = { id: libros[index].id, titulo: titulo.trim(), autor: autor.trim(), anio, disponible };
-  guardarLibros(libros);
-
-  res.json(libros[index]);
+    const { titulo, autor, anio, disponible } = req.body;
+    await libro.update({ titulo: titulo.trim(), autor: autor.trim(), anio, disponible });
+    await libro.save();
+    res.json(libro);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al actualizar el libro' });
+  }
 });
 
 // Eliminar un libro
-router.delete('/:id', (req, res) => {
-  const libros = leerLibros();
-  const index = libros.findIndex(l => l.id === Number(req.params.id));
-  if (index === -1) return res.status(404).json({ error: 'Libro no encontrado' });
+router.delete('/:id', async (req, res) => {
+  try {
+    const libro = await Libro.findByPk(req.params.id);
+    if (!libro) return res.status(404).json({ error: 'Libro no encontrado' });
 
-  const [eliminado] = libros.splice(index, 1);
-  guardarLibros(libros);
-
-  res.json(eliminado);
+    await libro.destroy();
+    res.json(libro);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al eliminar el libro' });
+  }
 });
 
 module.exports = router;
