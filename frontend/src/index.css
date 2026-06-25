@@ -324,6 +324,29 @@ tr:hover td {
   margin-top: 24px;
 }
 
+/* ─── Confirm Dialog ─── */
+.confirm-box {
+  background: var(--color-blanco);
+  border-radius: 8px;
+  padding: 28px 32px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.confirm-mensaje {
+  font-size: 0.95rem;
+  color: #111827;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.confirm-acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
 /* ─── Toast ─── */
 .toast {
   position: fixed;

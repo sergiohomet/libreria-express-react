@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { useBooks } from '../hooks/useBooks';
 import BookTable from '../components/BookTable';
 import BookModal from '../components/BookModal';
+import ConfirmDialog from '../components/ConfirmDialog';
 import Toast from '../components/Toast';
 import type { Book } from '../types/Book';
 import type { BookFormData } from '../schemas/bookSchema';
@@ -20,6 +21,7 @@ export default function BooksPage({ onLogout }: BooksPageProps) {
 
   const [modalAbierto, setModalAbierto] = useState(false);
   const [libroSeleccionado, setLibroSeleccionado] = useState<Book | null>(null);
+  const [confirmId, setConfirmId] = useState<number | null>(null);
   const [toast, setToast] = useState<ToastState | null>(null);
   const [busqueda, setBusqueda] = useState('');
   const [filtroDisponibilidad, setFiltroDisponibilidad] = useState<'todos' | 'disponibles' | 'no-disponibles'>('todos');
@@ -60,12 +62,15 @@ export default function BooksPage({ onLogout }: BooksPageProps) {
     }
   };
 
-  const handleEliminar = async (id: number) => {
-    const confirmado = window.confirm('¿Estás seguro de que querés eliminar este libro?');
-    if (!confirmado) return;
+  const handleEliminar = (id: number) => {
+    setConfirmId(id);
+  };
 
+  const confirmarEliminar = async () => {
+    if (confirmId === null) return;
+    setConfirmId(null);
     try {
-      await removeBook(id);
+      await removeBook(confirmId);
       mostrarToast('Libro eliminado correctamente', 'exito');
     } catch (err) {
       const mensaje = err instanceof Error ? err.message : 'Error al eliminar el libro';
@@ -131,6 +136,14 @@ export default function BooksPage({ onLogout }: BooksPageProps) {
           libro={libroSeleccionado}
           onCerrar={cerrarModal}
           onGuardar={handleGuardar}
+        />
+      )}
+
+      {confirmId !== null && (
+        <ConfirmDialog
+          mensaje="¿Estás seguro de que querés eliminar este libro?"
+          onConfirmar={confirmarEliminar}
+          onCancelar={() => setConfirmId(null)}
         />
       )}
 
